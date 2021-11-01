@@ -10,21 +10,10 @@ df = pd.DataFrame(columns=['Index', 'Bar Name', 'Address', 'Description', 'Monda
 request = requests.get('https://londoncocktailweek.com/bars/print/?collectionId=0&whatId=0&areaId=0&spiritId=0&openNow=0&search=')
 
 # Parse the request
-all_bars = BeautifulSoup(request.text, 'html.parser')
-bars = all_bars.select('.bar_name')
 soup = BeautifulSoup(request.text, 'html.parser')
-
-# finding parent <ul> tag
-parent = soup.find("ul")
-  
-# finding all <li> tags
-text = list(parent.descendants)
 
 ul = soup.find('ul')
 children = ul.findChildren("li", recursive=False)
-bars = []
-addresses = []
-descriptions = []
 for i, child in enumerate(children):
     bar = child.find('h2', {"class": "bar_name"}).getText()
     address = child.find('div', {'class': 'text'}).getText()
@@ -37,20 +26,6 @@ for i, child in enumerate(children):
     description = child.find('p', {'class': 'text--padded'}).getText()
         times.append({j: hours})
     
-    bars.append(bar)
-    addresses.append(address)
-    descriptions.append(description)
     
     df.loc[i] = [i, bar, address, description, times[0], times[1], times[2], times[3], times[4], times[5], times[6]]
 
-
-    #print(opening_hours)
-    #print(bar)
-    #print(opening_hours)
-
-b = []
-for i, item in enumerate(bars):
-    title = item.getText()
-    b.append(title)
-
-print(b)print(df)

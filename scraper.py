@@ -4,53 +4,32 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 # Create the inital Data Frame
-df = pd.DataFrame(columns=['Index', 'Bar Name', 'Address', 'Description', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+df = pd.DataFrame(columns=['Bar Name', 'Address', 'Description', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
 
 # Get the Request from the URL
 request = requests.get('https://londoncocktailweek.com/bars/print/?collectionId=0&whatId=0&areaId=0&spiritId=0&openNow=0&search=')
 
 # Parse the request
-all_bars = BeautifulSoup(request.text, 'html.parser')
-bars = all_bars.select('.bar_name')
 soup = BeautifulSoup(request.text, 'html.parser')
 
-# finding parent <ul> tag
-parent = soup.find("ul")
-  
-# finding all <li> tags
-text = list(parent.descendants)
-
+# Store all of the data
 ul = soup.find('ul')
 children = ul.findChildren("li", recursive=False)
-bars = []
-addresses = []
-descriptions = []
+
 for i, child in enumerate(children):
     bar = child.find('h2', {"class": "bar_name"}).getText()
     address = child.find('div', {'class': 'text'}).getText()
     opening_hours_container = child.find('ul', {'class': 'opening_hours__container'})
     opening_hours = opening_hours_container.find_all('li', {'class': 'opening_hours__times'})
+    description = child.find('p', {'class': 'text--padded'}).getText()
     times = []
-    for j, day in enumerate(opening_hours):
+    for day in opening_hours:
         day_of_week = day.find('div', {'class': 'text'}).getText()
         hours = day.find('li', {'class': 'text'}).getText()
-    description = child.find('p', {'class': 'text--padded'}).getText()
-        times.append({j: hours})
+        times.append(hours)
     
-    bars.append(bar)
-    addresses.append(address)
-    descriptions.append(description)
-    
-    df.loc[i] = [i, bar, address, description, times[0], times[1], times[2], times[3], times[4], times[5], times[6]]
+    # Add the data to a data-frame
+    df.loc[i] = [bar, address, description, times[0], times[1], times[2], times[3], times[4], times[5], times[6]]
 
-
-    #print(opening_hours)
-    #print(bar)
-    #print(opening_hours)
-
-b = []
-for i, item in enumerate(bars):
-    title = item.getText()
-    b.append(title)
-
-print(b)print(df)
+print(df)
+df.to_csv('original_csv.csv')

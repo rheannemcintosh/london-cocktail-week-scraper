@@ -32,3 +32,4 @@ for i, child in enumerate(children):
     df.loc[i] = [bar, address, description, times[0], times[1], times[2], times[3], times[4], times[5], times[6]]
 
 print(df)
+df.to_csv('original_csv.csv')

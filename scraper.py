@@ -12,20 +12,23 @@ request = requests.get('https://londoncocktailweek.com/bars/print/?collectionId=
 # Parse the request
 soup = BeautifulSoup(request.text, 'html.parser')
 
+# Store all of the data
 ul = soup.find('ul')
 children = ul.findChildren("li", recursive=False)
+
 for i, child in enumerate(children):
     bar = child.find('h2', {"class": "bar_name"}).getText()
     address = child.find('div', {'class': 'text'}).getText()
     opening_hours_container = child.find('ul', {'class': 'opening_hours__container'})
     opening_hours = opening_hours_container.find_all('li', {'class': 'opening_hours__times'})
+    description = child.find('p', {'class': 'text--padded'}).getText()
     times = []
     for day in opening_hours:
         day_of_week = day.find('div', {'class': 'text'}).getText()
         hours = day.find('li', {'class': 'text'}).getText()
-    description = child.find('p', {'class': 'text--padded'}).getText()
-        times.append({j: hours})
-    
+        times.append(hours)
     
     # Add the data to a data-frame
     df.loc[i] = [bar, address, description, times[0], times[1], times[2], times[3], times[4], times[5], times[6]]
+
+print(df)

@@ -1,35 +1,69 @@
 # Import Statements
-import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import requests
 
-# Create the inital Data Frame
-df = pd.DataFrame(columns=['Bar Name', 'Address', 'Description', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+# Create the Data Frame with Columns
+df = pd.DataFrame(columns=[
+    'Bar Name',
+    'Address',
+    'Description',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+])
 
 # Get the Request from the URL
-request = requests.get('https://londoncocktailweek.com/bars/print/?collectionId=0&whatId=0&areaId=0&spiritId=0&openNow=0&search=')
+request = requests.get(
+    'https://londoncocktailweek.com/bars/print/?collectionId=0&whatId=0&areaId=0&spiritId=0&openNow=0&search='
+)
 
-# Parse the request
+# Parse the request using Beautiful Soup
 soup = BeautifulSoup(request.text, 'html.parser')
 
-# Store all of the data
-ul = soup.find('ul')
-children = ul.findChildren("li", recursive=False)
+# Find all the bar list items
+bar_list = soup.find('ul')
+bars = bar_list.findChildren("li", recursive=False)
 
-for i, child in enumerate(children):
-    bar = child.find('h2', {"class": "bar_name"}).getText()
-    address = child.find('div', {'class': 'text'}).getText()
-    opening_hours_container = child.find('ul', {'class': 'opening_hours__container'})
-    opening_hours = opening_hours_container.find_all('li', {'class': 'opening_hours__times'})
-    description = child.find('p', {'class': 'text--padded'}).getText()
+# Loop throught the bars
+for i, bar in enumerate(bars):
+
+    # Get the name, address and description
+    bar_name = bar.find('h2', {'class': 'bar_name'}).getText()
+    address = bar.find('div', {'class': 'text'}).getText()
+    description = bar.find('p', {'class': 'text--padded'}).getText()
+
+    # Get the opening hours
+    opening_hours_container = bar.find(
+        'ul', {'class': 'opening_hours__container'}
+    )
+    weekly_opening_hours = opening_hours_container.find_all(
+        'li', {'class': 'opening_hours__times'}
+    )
+
+    # Loop through the opening hours and store in an array
     times = []
-    for day in opening_hours:
-        day_of_week = day.find('div', {'class': 'text'}).getText()
-        hours = day.find('li', {'class': 'text'}).getText()
+    for opening_hours in weekly_opening_hours:
+        day_of_week = opening_hours.find('div', {'class': 'text'}).getText()
+        hours = opening_hours.find('li', {'class': 'text'}).getText()
         times.append(hours)
-    
-    # Add the data to a data-frame
-    df.loc[i] = [bar, address, description, times[0], times[1], times[2], times[3], times[4], times[5], times[6]]
 
-print(df)
+    # Add the data to a data-frame
+    df.loc[i] = [
+        bar_name,
+        address,
+        description,
+        times[0],
+        times[1],
+        times[2],
+        times[3],
+        times[4],
+        times[5],
+        times[6]
+    ]
+
 df.to_csv('original_csv.csv')

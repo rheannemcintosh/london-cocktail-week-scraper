@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 import pandas as pd
 import requests
+from datetime import datetime
 
 # Create the Data Frame with Columns
 df = pd.DataFrame(columns=[
@@ -65,5 +66,5 @@ for i, bar in enumerate(bars):
         times[5],
         times[6]
     ]
-
-df.to_csv('original_csv.csv')
+csv_string = 'bar_csvs/bar_list_' + datetime.now().strftime("%Y_%m_%d_%H-%M-%S") + '.csv'
+df.to_csv(csv_string)

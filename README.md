@@ -4,9 +4,9 @@
 This application scrapes a list of bars and their location, description and opening hours from the [London Cocktail Week](https://londoncocktailweek.com/) website, and saves this information to a data frame and creates a new csv. This is developed using Python, and makes use of Beautiful Soup and Pandas.
 
 ## Repository Checklist
-- [ ] Upload Code
-- [ ] Format Code
-- [ ] Update README
+- [x] Upload Code
+- [x] Format Code
+- [x] Update README
 - [ ] Update Repository
 
 ## Future Ideas

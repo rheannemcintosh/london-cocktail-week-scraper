@@ -7,7 +7,12 @@ This application scrapes a list of bars and their location, description and open
 - [x] Upload Code
 - [x] Format Code
 - [x] Update README
-- [ ] Update Repository
+- [x] Update Repository
+- [x] Create Future Ideas
+- [x] Write Application Setup / Commands
+- [ ] Uploaded to Portfolio
+- [ ] Update Wiki
+- [ ] Archive Repository
 
 ## Future Ideas
 - Integrate the address with Google Maps Places API

@@ -17,4 +17,13 @@ This application scrapes a list of bars and their location, description and open
 - **Tags:** Pandas, BeautifulSoup, Scraper
 - **Author:** Rheanne McIntosh
 
+## Application Setup / Commands
+1. Run the following command:
+```
+python3 server.py
+```
+2. An up-to-date csv should appear in the `bar_csvs` folder with todays date
+
+<hr>
+
 If you have any questions or can suggest any improvements, please let me know!

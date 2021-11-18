@@ -15,7 +15,7 @@ This application scrapes a list of bars and their location, description and open
 - [ ] Archive Repository
 
 ## Future Ideas
-- Integrate the address with Google Maps Places API
+:bulb: Integrate the address with Google Maps Places API
 
 ## Notes
 - **Language:** Python

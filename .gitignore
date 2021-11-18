@@ -1,1 +1,3 @@
-bar_csvs
+bar_csvs/*
+!.gitkeep
+!original_csv.csv 
